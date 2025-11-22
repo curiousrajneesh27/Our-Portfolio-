@@ -26,6 +26,7 @@ interface Props {
     href: string;
   }[];
   className?: string;
+  gradient?: string;
 }
 
 export function ProjectCard({
@@ -39,37 +40,58 @@ export function ProjectCard({
   video,
   links,
   className,
+  gradient,
 }: Props) {
+  const getGradientClass = () => {
+    if (title === "Netflix GPT" || title === "DevTube") {
+      return "bg-gradient-to-br from-red-600 via-black to-red-800";
+    }
+    if (title === "Dream Smile Dental") {
+      return "bg-gradient-to-br from-white via-red-100 to-red-300";
+    }
+    if (title === "Ayush Realtors") {
+      return "bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300";
+    }
+    if (title === "DevTinder") {
+      return "bg-gradient-to-br from-gray-200 via-white to-gray-100";
+    }
+    return gradient || "bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700";
+  };
+  
+  const gradientClass = getGradientClass();
+    
   return (
     <Card
       className={
-        "flex flex-col overflow-hidden border hover:shadow-lg transition-all duration-300 ease-out h-full"
+        "flex flex-col overflow-hidden border hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 ease-out h-full group"
       }
     >
-      <Link
-        href={href || "#"}
-        className={cn("block cursor-pointer", className)}
-      >
-        {video && (
-          <video
-            src={video}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="pointer-events-none mx-auto h-40 w-full object-cover object-top" // needed because random black line at bottom of video
-          />
-        )}
-        {image && (
-          <Image
-            src={image}
-            alt={title}
-            width={500}
-            height={300}
-            className="h-40 w-full overflow-hidden object-cover object-top"
-          />
-        )}
-      </Link>
+        <Link
+          href={href || "#"}
+          className={cn("block cursor-pointer p-4 transition-all duration-300", gradientClass, className)}
+        >
+          <div className="overflow-hidden rounded-lg shadow-lg group-hover:shadow-2xl transition-shadow duration-300">
+            {video && (
+              <video
+                src={video}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="pointer-events-none mx-auto h-40 w-full object-cover object-top transition-transform duration-500 group-hover:scale-105 shadow-2xl"
+              />
+            )}
+            {image && (
+              <Image
+                src={image}
+                alt={title}
+                width={500}
+                height={300}
+                className="h-40 w-full object-cover object-top transition-transform duration-500 group-hover:scale-105 shadow-2xl"
+              />
+            )}
+          </div>
+        </Link>
       <CardHeader className="px-2">
         <div className="space-y-1">
           <CardTitle className="mt-1 text-base">{title}</CardTitle>
